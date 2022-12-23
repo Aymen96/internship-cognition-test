@@ -1,0 +1,19 @@
+{
+  "name": "internship-cognition-test",
+  "version": "1.0.0",
+  "description": "The aim of this test is to measure the cognition of the athletes. This includes a React project for the Frontend and a NodeJS project for the Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aymen96/internship-cognition-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aymen96/internship-cognition-test/issues"
+  },
+  "homepage": "https://github.com/Aymen96/internship-cognition-test#readme"
+}
