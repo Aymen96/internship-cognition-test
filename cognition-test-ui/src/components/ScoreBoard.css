@@ -16,3 +16,8 @@
     justify-content: space-evenly;
     margin: 6px 0;
 }
+
+.ScoreBoard .row div:first-child {
+    min-width: 180px;
+    text-align: left;
+}

@@ -15,12 +15,15 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
   const [dragX, setDragX] = useState(xs[0])
   const [dragY, setDragY] = useState(ys[0])
   const [isDragging, setIsDragging] = useState(false)
+  const [score, setScore] = useState(0)
+  const [tries, setTries] = useState(0)
 
   const handleDragStart = (e) => {
     setIsDragging(true)
   };
   const handleDragEnd = (e) => {
     setIsDragging(false)
+    setTries(tries + 1)
     // can't draw on previous point with kanva, increment with a very small number each time
     setDragX(dragX + 0.000001)
     setDragY(dragY + 0.000001)
@@ -97,7 +100,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={1} tries={5} time={"00:25"} />
+      <ScoreBoard score={score} tries={tries} time={"00:25"} />
     </>
   );
 }
