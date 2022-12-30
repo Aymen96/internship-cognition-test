@@ -1,6 +1,4 @@
-export const coordinates = generateCoordinates()
-
-function generateCoordinates() {
+export function generateCoordinates() {
     let coordinates = []
     let legalPoints = 0
     while (legalPoints < 25) {
@@ -10,11 +8,14 @@ function generateCoordinates() {
             legalPoints += 1
         }
     }
-    return coordinates
+    return {xs: coordinates.map(p => p.x), ys: coordinates.map(p => p.y)}
 };
 
 function generatePoint(min, max) {
-    return {x: Math.floor(Math.random() * (max - min)) + min, y: Math.floor(Math.random() * (max - min)) + min}
+    return {
+        x: Math.floor(Math.random() * (max - min)) + min,
+        y: Math.floor(Math.random() * (max - min)) + min
+    }
   }
 
 function collides(coordinates, point){
