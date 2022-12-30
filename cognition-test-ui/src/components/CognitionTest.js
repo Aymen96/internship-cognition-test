@@ -16,12 +16,15 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
   const [dragY, setDragY] = useState(ys[0])
   const [isDragging, setIsDragging] = useState(false)
   const [score, setScore] = useState(0)
+  const [errors, setErrors] = useState(0)
   const [tries, setTries] = useState(0)
+  const [visited, setVisited] = useState(Array(25))
 
-  const handleDragStart = (e) => {
+  const handleDragStart = () => {
     setIsDragging(true)
   };
-  const handleDragEnd = (e) => {
+
+  const handleDragEnd = () => {
     setIsDragging(false)
     setTries(tries + 1)
     // can't draw on previous point with kanva, increment with a very small number each time
@@ -36,7 +39,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
     setYs(res.ys)
     setDragX(res.xs[0])
     setDragY(res.ys[0])
-  }, [])
+  }, [canvasWidth, canvasHeight])
 
   return (
     <>
@@ -53,7 +56,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                           x={0}
                           y={0}
                           radius={CIRCLE_RADIUS}
-                          fill={"#89b717"}
+                          fill={visited[index] ? "orange" : "#89b717"}
                           shadowColor="black"
                           shadowBlur={5}
                       />
@@ -68,7 +71,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                       draggable={true}
                       onDragStart={handleDragStart}
                       onDragEnd={handleDragEnd}
-                      dragBoundFunc={function (pos) {
+                      dragBoundFunc={function (pos, e) {
                         // user can't drag outside of the canvas
                         const newPos = {...pos};
                         if (pos.x < PADDING) {
@@ -82,6 +85,20 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                         }
                         if (pos.y > canvasHeight - PADDING) {
                           newPos.y = canvasHeight
+                        }
+                        // check if user passed over another element when dragging  
+                        for (let i = 1; i < xs.length; i++) {
+                          if ( Math.abs(newPos.x - xs[i]) < CIRCLE_RADIUS && Math.abs(newPos.y - ys[i]) < CIRCLE_RADIUS ) {
+                            if(i === score + 1) {
+                              const newVisited = visited
+                              visited[i] = true
+                              setVisited(newVisited)
+                              setScore(score + 1)
+                              break;
+                            } else {
+                              setErrors(errors + 1)
+                            }
+                          }
                         }
                         return newPos;
                       }}
@@ -100,7 +117,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={score} tries={tries} time={"00:25"} />
+      <ScoreBoard score={score} tries={tries} errors={errors} time={"00:25"} />
     </>
   );
 }

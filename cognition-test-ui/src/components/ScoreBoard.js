@@ -1,12 +1,16 @@
 import './ScoreBoard.css';
 
-function ScoreBoard({ score, tries, time }) {
+function ScoreBoard({ score, tries, time, errors }) {
   
   return (
     <div className="ScoreBoard">
       <div className="row score">
         <div>Score:</div>
         <div>{score}</div>
+      </div>
+      <div className="row errors">
+        <div>Errors:</div>
+        <div>{errors}</div>
       </div>
       <div className="row tries">
         <div>Tries:</div>
