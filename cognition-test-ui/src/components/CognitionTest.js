@@ -14,77 +14,58 @@ const draggableElement = {
 };
 
 function generateShapes() {
-    const points = coordinates.map((point, i) => ({
-      id: i.toString(),
-      number: i + 1,
-      x: point.x,
-      y: point.y,
-    }));
-    points.push(draggableElement)
-    return points;
+  const xs = []
+  const ys = []
+  coordinates.forEach(p => {
+    xs.push(p.x)
+    ys.push(p.y)
+  })
+  xs.push(coordinates[0].x)
+  ys.push(coordinates[0].y)
+  return {xs: xs, ys: ys}
   }
   
   const INITIAL_STATE = generateShapes();
 
 function CognitionTest() {
 
-  const [stars, setStars] = useState(INITIAL_STATE);
+  
+  const [xs, setXs] = useState(INITIAL_STATE.xs)
+  const [ys, setYs] = useState(INITIAL_STATE.ys)
+  const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = (e) => {
-    const id = e.target.id();
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: star.id === id,
-        };
-      })
-    );
+    setIsDragging(true)
   };
   const handleDragEnd = (e) => {
-    setStars(
-      stars.map((star) => {
-        if (star.id === dragID) {
-            return {
-                ...star,
-                x: coordinates[0].x,
-                y: coordinates[0].y,
-                isDragging: false
-            }
-        } else {
-            return {...star};
-        }
-      })
-    );
+    setIsDragging(false)
   };
 
   return (
     <div className="canvas-container">
         <Stage width={400} height={400}>
         <Layer>
-            {stars.map((star) => (
+            {xs.map((_, index) => (
                 <Group 
-                    key={star.id}
-                    id={star.id}
-                    x={star.x}
-                    y={star.y}
-                    draggable={star.isFirstPoint}
+                    key={"point" + index}
+                    id={index}
+                    x={xs[index]}
+                    y={ys[index]}
+                    draggable={index == xs.length - 1}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                 >
                     <Circle
-                        key={star.id}
-                        id={star.id} 
                         x={0}
                         y={0}
                         radius={15}
-                        fill={star.isDragging ? "red" : "#89b717"}
+                        fill={index == xs.length - 1 && isDragging ? "red" : "#89b717"}
                         opacity={0.8}
                         shadowColor="black"
                         shadowBlur={10}
                         shadowOpacity={0.6}  
                     />
-                    <Text text={star.number} x={-3} y={-5}/>
+                    <Text text={index == xs.length - 1 ? 1 : index + 1} x={-3} y={-5}/>
                 </Group>
             ))}
         </Layer>
