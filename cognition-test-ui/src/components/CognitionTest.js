@@ -3,23 +3,32 @@ import { Stage, Layer, Circle } from 'react-konva';
 import { useState } from 'react';
 import { coordinates } from '../data/constants';
 
+const dragID = "drag"
+const draggableElement = {
+    id: dragID,
+    x: coordinates[0].x,
+    y: coordinates[0].y,
+    isDragging: false,
+    isFirstPoint: true,
+};
+
 function generateShapes() {
-    return coordinates.map((point, i) => ({
+    const points = coordinates.map((point, i) => ({
       id: i.toString(),
       x: point.x,
       y: point.y,
-      isDragging: false,
     }));
+    points.push(draggableElement)
+    return points;
   }
   
-  const INITIAL_STATE = generateShapes();
+const INITIAL_STATE = generateShapes();
 
 function CognitionTest() {
 
   const [stars, setStars] = useState(INITIAL_STATE);
 
   const handleDragStart = (e) => {
-    e.preventDefault()
     const id = e.target.id();
     setStars(
       stars.map((star) => {
@@ -30,15 +39,12 @@ function CognitionTest() {
       })
     );
   };
+
   const handleDragEnd = (e) => {
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: false,
-        };
-      })
-    );
+    const newEls = stars.filter(s => s.id !== dragID)
+    newEls.push(draggableElement)
+    console.log(newEls)
+    setStars([...newEls]);
   };
 
   return (
@@ -54,7 +60,7 @@ function CognitionTest() {
                     radius={15}
                     fill={star.isDragging ? "red" : "#89b717"}
                     opacity={0.8}
-                    draggable
+                    draggable={star.isFirstPoint}
                     rotation={star.rotation}
                     shadowColor="black"
                     shadowBlur={10}
