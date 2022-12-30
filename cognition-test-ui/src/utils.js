@@ -1,9 +1,17 @@
-export function generateCoordinates() {
+export function generateCoordinates(
+    canvasWidth,
+    canvasHeight,
+    padding,
+    numberOfPoints
+) {
     let coordinates = []
     let legalPoints = 0
-    while (legalPoints < 25) {
-        let point = generatePoint(20, 380)
-        if (collides(coordinates, point) === false){
+    while (legalPoints < numberOfPoints) {
+        const point = {
+            x: generateN(padding, canvasWidth - padding),
+            y: generateN(padding, canvasHeight - padding)
+        }
+        if (collides(coordinates, point) === false) {
             coordinates.push(point)
             legalPoints += 1
         }
@@ -11,12 +19,9 @@ export function generateCoordinates() {
     return {xs: coordinates.map(p => p.x), ys: coordinates.map(p => p.y)}
 };
 
-function generatePoint(min, max) {
-    return {
-        x: Math.floor(Math.random() * (max - min)) + min,
-        y: Math.floor(Math.random() * (max - min)) + min
-    }
-  }
+function generateN(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min
+}
 
 function collides(coordinates, point){
     for (const coord of coordinates){
