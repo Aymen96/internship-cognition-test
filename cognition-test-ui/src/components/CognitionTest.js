@@ -3,16 +3,6 @@ import { Stage, Layer, Circle, Group, Text } from 'react-konva';
 import { startTransition, useState } from 'react';
 import { coordinates } from '../data/constants';
 
-const dragID = "drag"
-const draggableElement = {
-    id: dragID,
-    number: 1,
-    x: coordinates[0].x,
-    y: coordinates[0].y,
-    isDragging: false,
-    isFirstPoint: true,
-};
-
 function generateShapes() {
   const xs = []
   const ys = []
@@ -20,8 +10,6 @@ function generateShapes() {
     xs.push(p.x)
     ys.push(p.y)
   })
-  xs.push(coordinates[0].x)
-  ys.push(coordinates[0].y)
   return {xs: xs, ys: ys}
   }
   
@@ -32,6 +20,8 @@ function CognitionTest() {
   
   const [xs, setXs] = useState(INITIAL_STATE.xs)
   const [ys, setYs] = useState(INITIAL_STATE.ys)
+  const [dragX, setDragX] = useState(INITIAL_STATE.xs[0])
+  const [dragY, setDragY] = useState(INITIAL_STATE.ys[0])
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = (e) => {
@@ -39,6 +29,8 @@ function CognitionTest() {
   };
   const handleDragEnd = (e) => {
     setIsDragging(false)
+    setDragX(dragX + 0.000001)
+    setDragY(dragY + 0.000001)
   };
 
   return (
@@ -51,7 +43,26 @@ function CognitionTest() {
                     id={index}
                     x={xs[index]}
                     y={ys[index]}
-                    draggable={index == xs.length - 1}
+                >
+                    <Circle
+                        x={0}
+                        y={0}
+                        radius={15}
+                        fill={"#89b717"}
+                        opacity={0.8}
+                        shadowColor="black"
+                        shadowBlur={10}
+                        shadowOpacity={0.6}  
+                    />
+                    <Text text={index + 1} x={-3} y={-5}/>
+                </Group>
+            ))}
+            <Group 
+                    key={"drag_point"}
+                    id={"drag_point"}
+                    x={dragX}
+                    y={dragY}
+                    draggable={true}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                 >
@@ -59,15 +70,14 @@ function CognitionTest() {
                         x={0}
                         y={0}
                         radius={15}
-                        fill={index == xs.length - 1 && isDragging ? "red" : "#89b717"}
+                        fill={isDragging ? "red" : "#89b717"}
                         opacity={0.8}
                         shadowColor="black"
                         shadowBlur={10}
                         shadowOpacity={0.6}  
                     />
-                    <Text text={index == xs.length - 1 ? 1 : index + 1} x={-3} y={-5}/>
+                    <Text text={1} x={-3} y={-5}/>
                 </Group>
-            ))}
         </Layer>
     </Stage>
   </div>
