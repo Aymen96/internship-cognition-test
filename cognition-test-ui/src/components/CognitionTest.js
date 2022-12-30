@@ -1,11 +1,12 @@
 import './CognitionTest.css';
-import { Stage, Layer, Circle } from 'react-konva';
-import { useState } from 'react';
+import { Stage, Layer, Circle, Group, Text } from 'react-konva';
+import { startTransition, useState } from 'react';
 import { coordinates } from '../data/constants';
 
 const dragID = "drag"
 const draggableElement = {
     id: dragID,
+    number: 1,
     x: coordinates[0].x,
     y: coordinates[0].y,
     isDragging: false,
@@ -15,6 +16,7 @@ const draggableElement = {
 function generateShapes() {
     const points = coordinates.map((point, i) => ({
       id: i.toString(),
+      number: i + 1,
       x: point.x,
       y: point.y,
     }));
@@ -22,7 +24,7 @@ function generateShapes() {
     return points;
   }
   
-const INITIAL_STATE = generateShapes();
+  const INITIAL_STATE = generateShapes();
 
 function CognitionTest() {
 
@@ -39,12 +41,21 @@ function CognitionTest() {
       })
     );
   };
-
   const handleDragEnd = (e) => {
-    const newEls = stars.filter(s => s.id !== dragID)
-    newEls.push(draggableElement)
-    console.log(newEls)
-    setStars([...newEls]);
+    setStars(
+      stars.map((star) => {
+        if (star.id === dragID) {
+            return {
+                ...star,
+                x: coordinates[0].x,
+                y: coordinates[0].y,
+                isDragging: false
+            }
+        } else {
+            return {...star};
+        }
+      })
+    );
   };
 
   return (
@@ -52,22 +63,29 @@ function CognitionTest() {
         <Stage width={400} height={400}>
         <Layer>
             {stars.map((star) => (
-                <Circle
+                <Group 
                     key={star.id}
                     id={star.id}
                     x={star.x}
                     y={star.y}
-                    radius={15}
-                    fill={star.isDragging ? "red" : "#89b717"}
-                    opacity={0.8}
                     draggable={star.isFirstPoint}
-                    rotation={star.rotation}
-                    shadowColor="black"
-                    shadowBlur={10}
-                    shadowOpacity={0.6}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
-                />
+                >
+                    <Circle
+                        key={star.id}
+                        id={star.id} 
+                        x={0}
+                        y={0}
+                        radius={15}
+                        fill={star.isDragging ? "red" : "#89b717"}
+                        opacity={0.8}
+                        shadowColor="black"
+                        shadowBlur={10}
+                        shadowOpacity={0.6}  
+                    />
+                    <Text text={star.number} x={-3} y={-5}/>
+                </Group>
             ))}
         </Layer>
     </Stage>
