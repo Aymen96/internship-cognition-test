@@ -1,6 +1,6 @@
 import './CognitionTest.css';
 import { Stage, Layer, Circle, Group, Text } from 'react-konva';
-import { startTransition, useState } from 'react';
+import { useState } from 'react';
 import { coordinates } from '../data/constants';
 
 function generateShapes() {
@@ -65,6 +65,22 @@ function CognitionTest() {
                     draggable={true}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
+                    dragBoundFunc={function (pos) {
+                      const newPos = {...pos};
+                      if(pos.x < 20) {
+                        newPos.x = 20
+                      }
+                      if(pos.y < 20) {
+                        newPos.y = 20
+                      }
+                      if(pos.x > 380) {
+                        newPos.x = 380
+                      }
+                      if(pos.y > 380) {
+                        newPos.y = 380
+                      }
+                      return newPos;
+                    }}
                 >
                     <Circle
                         x={0}
