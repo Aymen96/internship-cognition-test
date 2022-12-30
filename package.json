@@ -4,7 +4,9 @@
   "description": "The aim of this test is to measure the cognition of the athletes. This includes a React project for the Frontend and a NodeJS project for the Backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:fe": "cd cognition-test-ui && npm run start",
+    "start:be": "cd cognition-test-api && npm run start:dev"
   },
   "repository": {
     "type": "git",
