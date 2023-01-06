@@ -17,6 +17,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
   const [isDragging, setIsDragging] = useState(false)
   const [score, setScore] = useState(0)
   const [errors, setErrors] = useState(0)
+  const [currentErrorIndex, setCurrentErrorIndex] = useState(-1)
   const [tries, setTries] = useState(0)
   const [visited, setVisited] = useState(Array(25))
   const [coordsVisited, setCoordsVisited] = useState([])
@@ -105,9 +106,11 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                         if (pos.y > canvasHeight - PADDING) {
                           newPos.y = canvasHeight
                         }
-                        // check if user passed over another element when dragging  
+                        // check if user passed over another element when dragging
+                        let overNode = false
                         for (let i = 1; i < xs.length; i++) {
                           if ( Math.abs(newPos.x - xs[i]) < CIRCLE_RADIUS && Math.abs(newPos.y - ys[i]) < CIRCLE_RADIUS ) {
+                            overNode = true
                             if(i === score + 1) {
                               const newVisited = visited
                               visited[i] = true
@@ -122,10 +125,14 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
 
                               setScore(score + 1)
                               break;
-                            } else {
+                            } else if (i != currentErrorIndex) {
+                              setCurrentErrorIndex(i)
                               setErrors(errors + 1)
                             }
                           }
+                        }
+                        if(!overNode && currentErrorIndex != -1) {
+                          setCurrentErrorIndex(-1)
                         }
                         return newPos;
                       }}
