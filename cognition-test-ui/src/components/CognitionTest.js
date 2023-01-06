@@ -5,7 +5,7 @@ import { generateCoordinates } from '../utils';
 import ScoreBoard from './ScoreBoard';
 
 const CIRCLE_RADIUS = 15
-const NUMBER_OF_POINTS = 25
+const NUMBER_OF_POINTS = 5
 const PADDING = 20
 
 function CognitionTest({ canvasWidth, canvasHeight }) {
@@ -21,6 +21,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
   const [tries, setTries] = useState(0)
   const [visited, setVisited] = useState(Array(25))
   const [coordsVisited, setCoordsVisited] = useState([])
+  const [finished, setFinished] = useState(false)
 
   const handleDragStart = () => {
     setIsDragging(true)
@@ -30,21 +31,32 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
     setIsDragging(false)
     setTries(tries + 1)
     // can't draw on previous point with kanva, increment with a very small number each time
-    if(xDrag !== xs[score] + 0.000001) {
-      setDragX(xs[score] + 0.000001)
-      setDragY(ys[score] + 0.000001)
+    if(dragX !== xs[score - 1] + 0.000001) {
+      setDragX(xs[score - 1] + 0.000001)
+      setDragY(ys[score - 1] + 0.000001)
     } else {
-      setDragX(xDrag + 0.000001)
-      setDragY(yDrag + 0.000001)
+      setDragX(dragX + 0.000001)
+      setDragY(dragY + 0.000001)
     }
   }
 
   const retry = () => {
+    if(dragX !== xs[0] + 0.000001){
+      setDragX(xs[0] + 0.000001)
+      setDragY(ys[0] + 0.000001)
+    }
+    else {
+      setDragX(dragX + 0.000001)
+      setDragY(dragY + 0.000001)
+    }
+    setIsDragging(false)
     setScore(0)
     setErrors(0)
+    setCurrentErrorIndex(-1)
     setTries(0)
     setVisited(Array(25))
     setCoordsVisited([])
+    setFinished(false)
   }
 
   const shuffle = () => {
@@ -93,7 +105,8 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                       id={"drag_point"}
                       x={dragX}
                       y={dragY}
-                      draggable={true}
+                      draggable={!finished}
+                      visible={!finished}
                       onDragStart={handleDragStart}
                       onDragEnd={handleDragEnd}
                       dragBoundFunc={function (pos, e) {
@@ -111,12 +124,15 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                         if (pos.y > canvasHeight - PADDING) {
                           newPos.y = canvasHeight
                         }
+                        if (score === NUMBER_OF_POINTS) {
+                          setFinished(true)
+                        }
                         // check if user passed over another element when dragging
                         let overNode = false
-                        for (let i = 1; i < xs.length; i++) {
+                        for (let i = 0; i < xs.length; i++) {
                           if ( Math.abs(newPos.x - xs[i]) < CIRCLE_RADIUS && Math.abs(newPos.y - ys[i]) < CIRCLE_RADIUS ) {
                             overNode = true
-                            if(i === score + 1) {
+                            if(i === score) {
                               const newVisited = visited
                               visited[i] = true
                               setVisited(newVisited)
@@ -131,13 +147,13 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                               setScore(score + 1)
                               setCurrentErrorIndex(i)
                               break;
-                            } else if (i != currentErrorIndex) {
+                            }  else if (i !== currentErrorIndex) {
                               setCurrentErrorIndex(i)
                               setErrors(errors + 1)
                             }
                           }
                         }
-                        if(!overNode && currentErrorIndex != -1) {
+                        if(!overNode && currentErrorIndex !== -1) {
                           setCurrentErrorIndex(-1)
                         }
                         return newPos;
@@ -147,7 +163,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                           x={0}
                           y={0}
                           radius={CIRCLE_RADIUS}
-                          fill={isDragging ? "red" : "#89b717"}
+                          fill={"red"}
                           shadowColor="black"
                           shadowBlur={10}
                           opacity={isDragging ? 0.4 : 1}  
