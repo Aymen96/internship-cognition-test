@@ -31,7 +31,24 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
     // can't draw on previous point with kanva, increment with a very small number each time
     setDragX(dragX + 0.000001)
     setDragY(dragY + 0.000001)
-  };
+  }
+
+  const retry = () => {
+    setScore(0)
+    setErrors(0)
+    setTries(0)
+    setVisited(Array(25))
+    setCoordsVisited([])
+  }
+
+  const shuffle = () => {
+    retry()
+    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, NUMBER_OF_POINTS)
+    setXs(res.xs)
+    setYs(res.ys)
+    setDragX(res.xs[0])
+    setDragY(res.ys[0])
+  }
 
   // init: this code only runs once in component lifecycle
   useEffect(() => {
@@ -41,23 +58,6 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
     setDragX(res.xs[0])
     setDragY(res.ys[0])
   }, [canvasWidth, canvasHeight])
-
-  function Retry(){
-    setScore(0)
-    setErrors(0)
-    setTries(0)
-    setVisited(Array(25))
-    setCoordsVisited([])
-  }
-
-  function Shuffle(){
-    Retry()
-    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, NUMBER_OF_POINTS)
-    setXs(res.xs)
-    setYs(res.ys)
-    setDragX(res.xs[0])
-    setDragY(res.ys[0])
-  }
 
   return (
     <>
@@ -144,7 +144,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={score} tries={tries} errors={errors} time={"00:25"} retry={() => Retry()} shuffle={() => Shuffle()}/>
+      <ScoreBoard score={score} tries={tries} errors={errors} time={"00:25"} retry={retry} shuffle={shuffle}/>
     </>
   );
 }
