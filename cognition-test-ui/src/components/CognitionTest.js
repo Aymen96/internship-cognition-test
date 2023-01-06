@@ -26,12 +26,17 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
     setIsDragging(true)
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (pos) => {
     setIsDragging(false)
     setTries(tries + 1)
     // can't draw on previous point with kanva, increment with a very small number each time
-    setDragX(dragX + 0.000001)
-    setDragY(dragY + 0.000001)
+    if(xDrag !== xs[score] + 0.000001) {
+      setDragX(xs[score] + 0.000001)
+      setDragY(ys[score] + 0.000001)
+    } else {
+      setDragX(xDrag + 0.000001)
+      setDragY(yDrag + 0.000001)
+    }
   }
 
   const retry = () => {
@@ -124,6 +129,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                               coordsVisited.push(ys[i])
 
                               setScore(score + 1)
+                              setCurrentErrorIndex(i)
                               break;
                             } else if (i != currentErrorIndex) {
                               setCurrentErrorIndex(i)
