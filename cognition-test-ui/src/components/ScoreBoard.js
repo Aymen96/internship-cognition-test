@@ -1,7 +1,6 @@
 import './ScoreBoard.css';
 
-function ScoreBoard({ score, tries, time, errors }) {
-  
+function ScoreBoard({ score, tries, time, errors, retry, shuffle }) {
   return (
     <div className="ScoreBoard">
       <div className="row score">
@@ -22,8 +21,8 @@ function ScoreBoard({ score, tries, time, errors }) {
       </div>
       <div className="row">
         <div>
-            <button>Retry</button>
-            <button>Shuffle</button>
+            <button onClick={retry}>Retry</button>
+            <button onClick={shuffle}>Shuffle</button>
         </div>
       </div>
     </div>

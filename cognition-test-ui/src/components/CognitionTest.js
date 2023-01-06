@@ -1,5 +1,5 @@
 import './CognitionTest.css';
-import { Stage, Layer, Circle, Group, Text } from 'react-konva';
+import { Stage, Layer, Circle, Group, Text, Line } from 'react-konva';
 import { useEffect, useState } from 'react';
 import { generateCoordinates } from '../utils';
 import ScoreBoard from './ScoreBoard';
@@ -19,6 +19,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
   const [errors, setErrors] = useState(0)
   const [tries, setTries] = useState(0)
   const [visited, setVisited] = useState(Array(25))
+  const [coordsVisited, setCoordsVisited] = useState([])
 
   const handleDragStart = () => {
     setIsDragging(true)
@@ -41,11 +42,29 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
     setDragY(res.ys[0])
   }, [canvasWidth, canvasHeight])
 
+  function Retry(){
+    setScore(0)
+    setErrors(0)
+    setTries(0)
+    setVisited(Array(25))
+    setCoordsVisited([])
+  }
+
+  function Shuffle(){
+    Retry()
+    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, NUMBER_OF_POINTS)
+    setXs(res.xs)
+    setYs(res.ys)
+    setDragX(res.xs[0])
+    setDragY(res.ys[0])
+  }
+
   return (
     <>
       <div className="canvas-container" style={{width: canvasWidth + "px", height: canvasHeight + "px"}}>
           <Stage width={canvasWidth} height={canvasHeight}>
             <Layer>
+            <Line stroke="#black" draggable="false" points={coordsVisited} strokeWidth={3}/>
               {xs.map((_, index) => (
                   <Group 
                       key={"point" + index}
@@ -93,6 +112,14 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                               const newVisited = visited
                               visited[i] = true
                               setVisited(newVisited)
+
+                              if(score === 0){
+                                coordsVisited.push(xs[0])
+                                coordsVisited.push(ys[0])
+                              }
+                              coordsVisited.push(xs[i])
+                              coordsVisited.push(ys[i])
+
                               setScore(score + 1)
                               break;
                             } else {
@@ -117,7 +144,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={score} tries={tries} errors={errors} time={"00:25"} />
+      <ScoreBoard score={score} tries={tries} errors={errors} time={"00:25"} retry={() => Retry()} shuffle={() => Shuffle()}/>
     </>
   );
 }
