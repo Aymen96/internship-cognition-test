@@ -21,12 +21,24 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
   const [visited, setVisited] = useState(Array(25))
   const [coordsVisited, setCoordsVisited] = useState([])
   const [finished, setFinished] = useState(false)
-  const [time, setTime] = useState(0)
-  let startDate
+  const [time, setTime] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(false);
+
+  useEffect(() => {
+    let interval;
+    if (timerRunning) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+    } else if (!timerRunning) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timerRunning]);
 
   const handleDragStart = () => {
-    if(!startDate) {
-      startDate = (new Date()).getTime();
+    if(!timerRunning) {
+      setTimerRunning(true)
     }
     setIsDragging(true)
   };
@@ -62,6 +74,8 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
     setVisited(Array(25))
     setCoordsVisited([])
     setFinished(false)
+    setTimerRunning(false)
+    setTime(0)
   }
 
   const shuffle = () => {
@@ -131,7 +145,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                         }
                         if (score === NUMBER_OF_POINTS) {
                           setFinished(true)
-                          setTime(Math.abs((new Date()).getTime() - startDate))
+                          setTimerRunning(false)
                         }
                         // check if user passed over another element when dragging
                         let overNode = false
@@ -181,7 +195,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={score} tries={tries} errors={errors} time={time} retry={retry} shuffle={shuffle}/>
+      <ScoreBoard score={score} tries={tries} errors={errors} time={time} retry={retry} shuffle={shuffle} />
     </>
   );
 }
