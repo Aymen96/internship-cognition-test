@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { generateCoordinates } from '../utils';
 import ScoreBoard from './ScoreBoard';
 
-const NUMBER_OF_POINTS = 25
+const NUMBER_OF_POINTS = 5
 const PADDING = 20
 
 function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
@@ -21,8 +21,13 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
   const [visited, setVisited] = useState(Array(25))
   const [coordsVisited, setCoordsVisited] = useState([])
   const [finished, setFinished] = useState(false)
+  const [time, setTime] = useState(0)
+  let startDate
 
   const handleDragStart = () => {
+    if(!startDate) {
+      startDate = (new Date()).getTime();
+    }
     setIsDragging(true)
   };
 
@@ -126,6 +131,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                         }
                         if (score === NUMBER_OF_POINTS) {
                           setFinished(true)
+                          setTime(Math.abs((new Date()).getTime() - startDate))
                         }
                         // check if user passed over another element when dragging
                         let overNode = false
@@ -168,14 +174,14 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                           shadowBlur={10}
                           opacity={isDragging ? 0.4 : 1}  
                       />
-                      <Text text={1} x={-3} y={-5}/>
+                      <Text text={Math.max(1, score)} x={-3} y={-5}/>
                   </Group>
               <Text text={"Anfang"} x={xs[0] - circleRadius - 5} y={ys[0] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
               <Text text={"Ende"} x={xs[xs.length - 1] - circleRadius } y={ys[ys.length - 1] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={score} tries={tries} errors={errors} time={"00:25"} retry={retry} shuffle={shuffle}/>
+      <ScoreBoard score={score} tries={tries} errors={errors} time={time} retry={retry} shuffle={shuffle}/>
     </>
   );
 }
