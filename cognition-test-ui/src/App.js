@@ -9,13 +9,19 @@ function App() {
   const onTestStart = () => {
     setIsStarted(!isStarted)
   }
+
+  const DEVICE_WIDTH = 994;
+  const game = {}
+  game.canvasWidth = window.innerWidth < DEVICE_WIDTH ? window.innerWidth - 10 : window.innerWidth - 200
+  game.canvasHeight = window.innerHeight - 200
+  game.circleRadius =  window.innerWidth < DEVICE_WIDTH  ? 10 : 15
   
   return (
     <div className="App">
       {
       !isStarted && false ?
       (<button onClick={onTestStart}>Start the test</button>) : 
-      <CognitionTest canvasWidth={window.innerWidth - 200} canvasHeight={window.innerHeight - 200}/>
+      <CognitionTest {...game} />
       }
     </div>
   );

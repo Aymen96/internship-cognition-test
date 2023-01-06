@@ -4,11 +4,10 @@ import { useEffect, useState } from 'react';
 import { generateCoordinates } from '../utils';
 import ScoreBoard from './ScoreBoard';
 
-const CIRCLE_RADIUS = 15
-const NUMBER_OF_POINTS = 5
+const NUMBER_OF_POINTS = 25
 const PADDING = 20
 
-function CognitionTest({ canvasWidth, canvasHeight }) {
+function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
 
   const [xs, setXs] = useState([])
   const [ys, setYs] = useState([])
@@ -38,6 +37,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
       setDragX(dragX + 0.000001)
       setDragY(dragY + 0.000001)
     }
+    setCurrentErrorIndex(score - 1)
   }
 
   const retry = () => {
@@ -92,7 +92,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                       <Circle
                           x={0}
                           y={0}
-                          radius={CIRCLE_RADIUS}
+                          radius={circleRadius}
                           fill={visited[index] ? "orange" : "#89b717"}
                           shadowColor="black"
                           shadowBlur={5}
@@ -130,7 +130,7 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                         // check if user passed over another element when dragging
                         let overNode = false
                         for (let i = 0; i < xs.length; i++) {
-                          if ( Math.abs(newPos.x - xs[i]) < CIRCLE_RADIUS && Math.abs(newPos.y - ys[i]) < CIRCLE_RADIUS ) {
+                          if ( Math.abs(newPos.x - xs[i]) < circleRadius && Math.abs(newPos.y - ys[i]) < circleRadius ) {
                             overNode = true
                             if(i === score) {
                               const newVisited = visited
@@ -162,14 +162,16 @@ function CognitionTest({ canvasWidth, canvasHeight }) {
                       <Circle
                           x={0}
                           y={0}
-                          radius={CIRCLE_RADIUS}
                           fill={"red"}
+                          radius={circleRadius}
                           shadowColor="black"
                           shadowBlur={10}
                           opacity={isDragging ? 0.4 : 1}  
                       />
                       <Text text={1} x={-3} y={-5}/>
                   </Group>
+              <Text text={"Anfang"} x={xs[0] - circleRadius - 5} y={ys[0] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
+              <Text text={"Ende"} x={xs[xs.length - 1] - circleRadius } y={ys[ys.length - 1] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
             </Layer>
         </Stage>
       </div>
