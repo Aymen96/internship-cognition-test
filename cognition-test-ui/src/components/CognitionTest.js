@@ -87,6 +87,10 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
     setDragY(res.ys[0])
   }
 
+  const sendData = () => {
+    
+  }
+
   // init: this code only runs once in component lifecycle
   useEffect(() => {
     const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, NUMBER_OF_POINTS)
@@ -146,6 +150,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                         if (score === NUMBER_OF_POINTS) {
                           setFinished(true)
                           setTimerRunning(false)
+                          sendData()
                         }
                         // check if user passed over another element when dragging
                         let overNode = false
