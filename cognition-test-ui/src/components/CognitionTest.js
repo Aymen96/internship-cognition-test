@@ -3,6 +3,7 @@ import { Stage, Layer, Circle, Group, Text, Line } from 'react-konva';
 import { useEffect, useState } from 'react';
 import { generateCoordinates } from '../utils';
 import ScoreBoard from './ScoreBoard';
+import axios from 'axios'
 
 const NUMBER_OF_POINTS = 5
 const PADDING = 20
@@ -88,7 +89,21 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
   }
 
   const sendData = () => {
-    
+    const data = {
+      "user_id":1,
+      "errorsCount":errors, 
+      "triesCount":tries,
+      "test_time_in_secs":time,
+      "participated_on_date":(new Date()).toISOString().slice(0, 19).replace('T', ' ')
+  };
+
+  axios.post('http://localhost:3333/submit_test_records', data)
+      .then(response => {
+          console.log(response.data);
+      })
+      .catch(error => {
+          console.log(error);
+      });
   }
 
   // init: this code only runs once in component lifecycle
