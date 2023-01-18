@@ -1,26 +1,30 @@
 {
-  "name": "internship-cognition-test",
-  "version": "1.0.0",
-  "description": "The aim of this test is to measure the cognition of the athletes. This includes a React project for the Frontend and a NodeJS project for the Backend",
-  "main": "index.js",
+  "name": "express-browser-reload",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:fe": "cd cognition-test-ui && npm run start",
-    "start:be": "cd cognition-test-api && npm run start:dev"
+    "start:be": "node ./api/bin/www",
+    "start:fe": "(cd ui && react-scripts start ../)",
+    "watch": "nodemon --ext ./api/*"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Aymen96/internship-cognition-test.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Aymen96/internship-cognition-test/issues"
-  },
-  "homepage": "https://github.com/Aymen96/internship-cognition-test#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
-    "express": "^4.18.2",
-    "pg": "^8.8.0"
+    "express": "~4.16.1",
+    "pg": "^8.8.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.2.2",
+    "konva": "^8.3.14",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-konva": "^18.2.3",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "connect-livereload": "^0.6.1",
+    "livereload": "^0.9.3",
+    "nodemon": "^2.0.20"
   }
 }
