@@ -1,6 +1,6 @@
 import './ScoreBoard.css';
 
-function ScoreBoard({ score, tries, time, errors, retry, shuffle }) {
+function ScoreBoard({ score, tries, time, errors, retry, shuffle, setOnRecordsTable }) {
   return (
     <div className="ScoreBoard">
       <div className="row score">
@@ -23,6 +23,9 @@ function ScoreBoard({ score, tries, time, errors, retry, shuffle }) {
         <div>
             <button onClick={retry}>Retry</button>
             <button onClick={shuffle}>Shuffle</button>
+            <button onClick={() => {
+              setOnRecordsTable(true)
+            }}>See previous Records</button>
         </div>
       </div>
     </div>

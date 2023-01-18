@@ -11,8 +11,9 @@ const pool = new Pool({
 });
 
 /* POST test records. */
-router.get('/test_records', function(req, res, next) {
-  res.status(200).json({ message : 'This is home page' });
+router.get('/test_records', async (req, res, next) => {
+  const { rows } = await pool.query('SELECT * FROM public.test_records ORDER BY record_id ASC ', Object.values(data));
+  res.status(200).json({ data: rows });
 });
 
 router.post('/submit_test_records', async (req, res) => {

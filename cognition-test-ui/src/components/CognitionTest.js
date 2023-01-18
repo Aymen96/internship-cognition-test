@@ -5,10 +5,10 @@ import { generateCoordinates } from '../utils';
 import ScoreBoard from './ScoreBoard';
 import axios from 'axios'
 
-const NUMBER_OF_POINTS = 5
 const PADDING = 20
+const LOGGED_IN_USER_ID = "546722"
 
-function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
+function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTable, numberOfNodes }) {
 
   const [xs, setXs] = useState([])
   const [ys, setYs] = useState([])
@@ -81,7 +81,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
 
   const shuffle = () => {
     retry()
-    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, NUMBER_OF_POINTS)
+    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, numberOfNodes)
     setXs(res.xs)
     setYs(res.ys)
     setDragX(res.xs[0])
@@ -90,14 +90,14 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
 
   const sendData = () => {
     const data = {
-      "user_id":1,
-      "errorsCount":errors, 
-      "triesCount":tries,
-      "test_time_in_secs":time,
-      "participated_on_date":(new Date()).toISOString().slice(0, 19).replace('T', ' ')
-  };
+      "user_id": LOGGED_IN_USER_ID,
+      "errorsCount": errors, 
+      "triesCount": tries,
+      "test_time_in_secs": time,
+      "participated_on_date": (new Date()).toISOString().slice(0, 19).replace('T', ' ')
+    };
 
-  axios.post('http://localhost:3333/submit_test_records', data)
+    axios.post('http://localhost:3333/submit_test_records', data)
       .then(response => {
           console.log(response.data);
       })
@@ -106,9 +106,9 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
       });
   }
 
-  // init: this code only runs once in component lifecycle
+  // init: this code only, runs once in component lifecycle
   useEffect(() => {
-    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, NUMBER_OF_POINTS)
+    const res = generateCoordinates(canvasWidth, canvasHeight, PADDING, numberOfNodes)
     setXs(res.xs)
     setYs(res.ys)
     setDragX(res.xs[0])
@@ -162,7 +162,8 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                         if (pos.y > canvasHeight - PADDING) {
                           newPos.y = canvasHeight
                         }
-                        if (score === NUMBER_OF_POINTS) {
+                        if (score === numberOfNodes) {
+                          setTries(tries + 1)
                           setFinished(true)
                           setTimerRunning(false)
                           sendData()
@@ -170,8 +171,10 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                         // check if user passed over another element when dragging
                         let overNode = false
                         for (let i = 0; i < xs.length; i++) {
+                          // if the cursor is from a distance smaller than the circleRadius from the node point, then the user went over the node
                           if ( Math.abs(newPos.x - xs[i]) < circleRadius && Math.abs(newPos.y - ys[i]) < circleRadius ) {
                             overNode = true
+                            // if we visited the next correct node
                             if(i === score) {
                               const newVisited = visited
                               visited[i] = true
@@ -187,7 +190,9 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
                               setScore(score + 1)
                               setCurrentErrorIndex(i)
                               break;
-                            }  else if (i !== currentErrorIndex) {
+                              // make sure an error does not count twice
+                              // leaving dragged node does not count as an error
+                            }  else if (i !== currentErrorIndex && i !==score - 1) {
                               setCurrentErrorIndex(i)
                               setErrors(errors + 1)
                             }
@@ -215,7 +220,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius }) {
             </Layer>
         </Stage>
       </div>
-      <ScoreBoard score={score} tries={tries} errors={errors} time={time} retry={retry} shuffle={shuffle} />
+      <ScoreBoard score={score} tries={tries} errors={errors} time={time} retry={retry} shuffle={shuffle} setOnRecordsTable={setOnRecordsTable} />
     </>
   );
 }
