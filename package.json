@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start:be": "node ./api/bin/www",
-    "start:fe": "(cd ui && react-scripts start ../)",
+    "start:be": "node ./cognition-test-api/bin/www",
+    "start:fe": "(cd cognition-test-ui && react-scripts start ../)",
     "watch": "nodemon --ext ./api/*"
   },
   "dependencies": {
