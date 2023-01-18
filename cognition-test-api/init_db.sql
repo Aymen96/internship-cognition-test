@@ -19,7 +19,7 @@ CREATE TABLE test_records (
 
 /* INSERTING DATA */
 INSERT INTO accounts (username, password, email, created_on, last_login) 
-VALUES ('user1', 'password1', 'email1', timestamp '2017-10-12 21:22:23', timestamp '2017-10-12 21:22:23')
+VALUES ('user1', 'password1', 'email1', timestamp '2017-10-12 21:22:23', timestamp '2017-10-12 21:22:23');
 
 INSERT INTO accounts (username, password, email, created_on, last_login) 
-VALUES ('user2', 'password2', 'email2', timestamp '2017-10-12 21:22:23', timestamp '2017-10-12 21:22:23')
+VALUES ('user2', 'password2', 'email2', timestamp '2017-10-12 21:22:23', timestamp '2017-10-12 21:22:23');
