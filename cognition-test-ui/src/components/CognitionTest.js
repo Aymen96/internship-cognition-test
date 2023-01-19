@@ -59,6 +59,9 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
   }
 
   const retry = () => {
+    if(score !== 0 && score !== numberOfNodes){
+      sendData()
+    }
     if(dragX !== xs[0] + 0.000001){
       setDragX(xs[0] + 0.000001)
       setDragY(ys[0] + 0.000001)
@@ -163,7 +166,6 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
                           newPos.y = canvasHeight
                         }
                         if (score === numberOfNodes) {
-                          setTries(tries + 1)
                           setFinished(true)
                           setTimerRunning(false)
                           sendData()
