@@ -94,6 +94,9 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
   const sendData = () => {
     const data = {
       "user_id": LOGGED_IN_USER_ID,
+      "numberOfPoints": numberOfNodes,
+      "score": score,
+      "finished": finished,
       "errorsCount": errors, 
       "triesCount": tries,
       "test_time_in_secs": time,

@@ -25,6 +25,7 @@ export default function TestRecordsTable({ setOnRecordsTable }) {
     useEffect(() => {
         fetchData()
     }, [])
+    console.log(records)
   return (
     <div>
         <div>Test records for current user</div>
@@ -37,6 +38,9 @@ export default function TestRecordsTable({ setOnRecordsTable }) {
                     <TableRow>
                         <TableCell>Record ID</TableCell>
                         <TableCell align="right">User ID</TableCell>
+                        <TableCell align="right">Number of Points</TableCell>
+                        <TableCell align="right">Score</TableCell>
+                        <TableCell align="right">Finished</TableCell>
                         <TableCell align="right">Errors Count</TableCell>
                         <TableCell align="right">Tries Count</TableCell>
                         <TableCell align="right">Duration in seconds</TableCell>
@@ -53,6 +57,9 @@ export default function TestRecordsTable({ setOnRecordsTable }) {
                             {row.record_id}
                         </TableCell>
                         <TableCell align="right">{row.user_id}</TableCell>
+                        <TableCell align="right">{row.numberofpoints}</TableCell>
+                        <TableCell align="right">{row.score}</TableCell>
+                        <TableCell align="right">{row.finished.toString()}</TableCell>
                         <TableCell align="right">{row.errorscount}</TableCell>
                         <TableCell align="right">{row.triescount}</TableCell>
                         <TableCell align="right">{row.test_time_in_secs}</TableCell>

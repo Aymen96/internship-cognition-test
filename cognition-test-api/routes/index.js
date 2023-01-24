@@ -19,7 +19,7 @@ router.get('/test_records', async (req, res, next) => {
 router.post('/submit_test_records', async (req, res) => {
   try {
     const data = req.body;
-    const { rows } = await pool.query('INSERT INTO test_records (user_id, errorscount, triescount, test_time_in_secs, participated_on_date) VALUES ($1, $2, $3, $4, $5)', Object.values(data));
+    const { rows } = await pool.query('INSERT INTO test_records (user_id, numberOfPoints, score, finished, errorscount, triescount, test_time_in_secs, participated_on_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', Object.values(data));
     res.status(200).json({ message: 'Data added successfully', data: rows });
   } catch (err) {
     res.status(500).json({ message: 'An error occurred', error: err });

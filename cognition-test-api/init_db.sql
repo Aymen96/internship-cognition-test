@@ -11,6 +11,9 @@ CREATE TABLE accounts (
 CREATE TABLE test_records (
 	record_id serial PRIMARY KEY,
 	user_id serial NOT NULL,
+	numberOfPoints INTEGER NOT NULL,
+	score INTEGER,
+	finished BOOLEAN NOT NULL,
 	errorsCount INTEGER,
 	triesCount INTEGER,
 	test_time_in_secs INTEGER,
