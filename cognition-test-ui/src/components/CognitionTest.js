@@ -217,8 +217,8 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
                       />
                       <Text text={Math.max(1, score)} x={-3} y={-5}/>
                   </Group>
-              <Text text={"Anfang"} x={xs[0] - circleRadius - 5} y={ys[0] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
-              <Text text={"Ende"} x={xs[xs.length - 1] - circleRadius } y={ys[ys.length - 1] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
+              <Text text={"Start"} x={xs[0] - circleRadius - 5} y={ys[0] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
+              <Text text={"End"} x={xs[xs.length - 1] - circleRadius } y={ys[ys.length - 1] - 2 * circleRadius} fontStyle="bold" align="center" fill="orange" />
             </Layer>
         </Stage>
       </div>

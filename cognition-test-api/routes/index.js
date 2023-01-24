@@ -12,7 +12,7 @@ const pool = new Pool({
 
 /* POST test records. */
 router.get('/test_records', async (req, res, next) => {
-  const { rows } = await pool.query('SELECT * FROM public.test_records ORDER BY record_id ASC ', Object.values(data));
+  const { rows } = await pool.query('SELECT * FROM public.test_records ORDER BY record_id ASC ');
   res.status(200).json({ data: rows });
 });
 
