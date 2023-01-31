@@ -13,19 +13,18 @@ export default function TestRecordsTable({ setOnRecordsTable }) {
   function fetchData() {
     axios.get('http://localhost:3333/test_records')
         .then(response => {
-            console.log(response.data)
             setRecords(response.data.data);
         })
         .catch(error => {
             console.log(error);
         });
-    }
+  }
 
     // fetch data on component init
     useEffect(() => {
         fetchData()
     }, [])
-    console.log(records)
+
   return (
     <div>
         <div>Test records for current user</div>
