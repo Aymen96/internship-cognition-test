@@ -60,7 +60,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
 
   const retry = () => {
     if(score !== 0 && score !== numberOfNodes){
-      sendData()
+      sendData(false)
     }
     if(dragX !== xs[0] + 0.000001){
       setDragX(xs[0] + 0.000001)
@@ -91,7 +91,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
     setDragY(res.ys[0])
   }
 
-  const sendData = () => {
+  const sendData = (finished) => {
     const data = {
       "user_id": LOGGED_IN_USER_ID,
       "numberOfPoints": numberOfNodes,
@@ -171,7 +171,7 @@ function CognitionTest({ canvasWidth, canvasHeight, circleRadius, setOnRecordsTa
                         if (score === numberOfNodes) {
                           setFinished(true)
                           setTimerRunning(false)
-                          sendData()
+                          sendData(true)
                         }
                         // check if user passed over another element when dragging
                         let overNode = false
